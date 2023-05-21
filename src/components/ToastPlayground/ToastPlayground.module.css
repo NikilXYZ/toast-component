@@ -94,7 +94,7 @@
   gap: 4px 16px;
 }
 
-.radioWrapper label {
+.radioWrapper > * {
   display: flex;
   align-items: center;
   gap: 8px;
