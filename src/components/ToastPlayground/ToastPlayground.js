@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from '../Button';
-import Toast from '../Toast'
+import ToastShelf from '../ToastShelf'
 
 import styles from './ToastPlayground.module.css';
 
@@ -9,10 +9,43 @@ import { useToggle } from '../../hooks/useToggle';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
+const TOAST_SCHEMA = {
+  message: '16 photos were uploaded',
+  variant: 'success',
+  isVisible: true
+}
+
+const DEFAULT_MESSAGE = '16 photos have been uploaded'
+const DEFAULT_VARIANT = VARIANT_OPTIONS[0]
+
 function ToastPlayground() {
-  const [message, setMessage] = React.useState('16 photos have been uploaded');
-  const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [isToastVisible, toggleIsToastVisible] = useToggle(false);
+  const [toastList, setToastList] = React.useState([])
+
+  const [message, setMessage] = React.useState(DEFAULT_MESSAGE);
+  const [variant, setVariant] = React.useState(DEFAULT_VARIANT);
+
+  const appendToToastList = (toast) => {
+    console.log(toastList)
+    console.log(toast)
+    setToastList(currentToastList => [...currentToastList, toast])
+  }
+
+  const toggleToastVisibility = (index) => {
+    setToastList(currentToastList => {
+      const toast = currentToastList[index]
+      console.log(toast)
+      console.log(currentToastList)
+      toast.isVisible = !toast.isVisible
+      return [...currentToastList]
+    })
+  }
+
+  const removeToastFromList = (toastToRemove) => {
+    setToastList(currentToastList => {
+      const newToastList = currentToastList.filter(toast => toast !== toastToRemove)
+      return newToastList
+    })
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -21,9 +54,19 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {isToastVisible && <Toast variant={variant} message={message} handleClose={toggleIsToastVisible}/>}
+      <ToastShelf toasts={toastList} handleCloseToast={toggleToastVisibility} />
 
-      <div className={styles.controlsWrapper}>
+      <form
+        className={styles.controlsWrapper}
+        onSubmit={(event) => {
+          event.preventDefault()
+          const newToast = { message, variant, isVisible: true }
+          appendToToastList(newToast)
+
+          setMessage(DEFAULT_MESSAGE)
+          setVariant(DEFAULT_VARIANT)
+        }}
+      >
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -71,32 +114,12 @@ function ToastPlayground() {
         </div>
 
         <div className={styles.row}>
-          <label
-            htmlFor="toast-visibility"
-            className={styles.label}
-            style={{ alignSelf: 'baseline' }}
-          >
-            Visible?
-          </label>
-          <input
-          type="checkbox"
-          id="toast-visibility"
-          checked={isToastVisible}
-          onChange={toggleIsToastVisible}
-        />
-        </div>
-
-        <div className={styles.row}>
           <div className={styles.label} />
           <div>
-            <Button
-              onClick={(event)=>{
-                if(!isToastVisible) toggleIsToastVisible();
-              }}
-            >Pop Toast!</Button>
+            <Button>Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
