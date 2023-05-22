@@ -1,12 +1,14 @@
 import React from 'react';
 
 import Toast from '../Toast';
+import { ToastContext } from '../ToastProvider/ToastProvider';
 import styles from './ToastShelf.module.css';
 
-function ToastShelf({ toasts, handleCloseToast }) {
+function ToastShelf() {
+  const { toastList, toggleToastVisibility } = React.useContext(ToastContext)
   return (
     <ol className={styles.wrapper}>
-      {toasts.map((toast, index) => (
+      {toastList.map((toast, index) => (
         toast.isVisible &&
         <li className={styles.toastWrapper}
           key={index}
@@ -16,7 +18,7 @@ function ToastShelf({ toasts, handleCloseToast }) {
             message={toast.message}
             handleClose={() => {
               console.log(index)
-              handleCloseToast(index)
+              toggleToastVisibility(index)
             }}
           />
         </li>
