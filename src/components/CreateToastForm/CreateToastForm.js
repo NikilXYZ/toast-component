@@ -29,6 +29,7 @@ function CreateToastForm() {
       className={styles.controlsWrapper}
       onSubmit={(event) => {
         event.preventDefault()
+        
         const newToast = { message, variant, isVisible: true }
         appendToToastList(newToast)
 
