@@ -21,6 +21,11 @@ function ToastProvider({ children }) {
     })
   }
 
+  const hideAllToasts = () => {
+    const newToastList = [...toastList]
+    newToastList.forEach(toast => removeToastFromList(toast))
+  }
+
   const removeToastFromList = (toastToRemove) => {
     setToastList(currentToastList => {
       const newToastList = currentToastList.filter(toast => toast !== toastToRemove)
@@ -28,7 +33,11 @@ function ToastProvider({ children }) {
     })
   }
 
-  const value = {toastList, appendToToastList, toggleToastVisibility, removeToastFromList}
+  const removeAllToasts = () => {
+    setToastList([])
+  }
+
+  const value = {toastList, appendToToastList, toggleToastVisibility, hideAllToasts, removeAllToasts}
 
   return (
     <ToastContext.Provider

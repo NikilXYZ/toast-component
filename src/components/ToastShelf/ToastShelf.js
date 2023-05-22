@@ -2,12 +2,20 @@ import React from 'react';
 
 import Toast from '../Toast';
 import { ToastContext } from '../ToastProvider/ToastProvider';
+import { useKeyUp } from '../../hooks/useKeyUp'
 import styles from './ToastShelf.module.css';
 
 function ToastShelf() {
-  const { toastList, toggleToastVisibility } = React.useContext(ToastContext)
+  const { toastList, toggleToastVisibility, hideAllToasts } = React.useContext(ToastContext)
+
+  useKeyUp('Escape', hideAllToasts)
+
   return (
-    <ol className={styles.wrapper}>
+    <ol className={styles.wrapper}
+      role="region"
+      aria-live='polite'
+      aria-label='Notification'
+    >
       {toastList.map((toast, index) => (
         toast.isVisible &&
         <li className={styles.toastWrapper}

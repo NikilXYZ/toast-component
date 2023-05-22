@@ -6,10 +6,10 @@ export function useKeyUp(key, callbackFunction) {
             if (event.key === key) callbackFunction()
         } 
 
-        document.addEventListener('keyup', callbackFunction)
+        document.addEventListener('keyup', handleKeyUp)
 
         return () => {
-            document.removeEventListener('keyup', callbackFunction)
+            document.removeEventListener('keyup', handleKeyUp)
         }
     }, [key, callbackFunction])
 }
